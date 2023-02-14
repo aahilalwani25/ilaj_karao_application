@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import './global/styles/screens.dart';
+import 'Screens/intro_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,30 +35,56 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    Timer(
+        const Duration(seconds: 5),
+        () => Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (builder) => const IntroScreenClass())));
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
       body: Container(
+        color: Colors.white,
         width: getWidth(context),
         height: getHeight(context),
-        decoration: BoxDecoration(
-            image: const DecorationImage(
-              image: NetworkImage(
-                "https://i.pinimg.com/564x/0f/26/81/0f268185754236facab219156bb71694.jpg"),
-                opacity: 0.5, 
-                alignment: Alignment.center,
-                ),
-            backgroundBlendMode: BlendMode.darken,),
+        // decoration: const BoxDecoration(
+        //   color: Colors.black,
+        //   //backgroundBlendMode: BlendMode.darken,
+        //     image: DecorationImage(
+        //       fit: BoxFit.cover,
+        //       image: AssetImage("assets/images/bg_img.jpg"),
+        //         alignment: Alignment.center,
+        //         ),
+
+        //     ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+                child: Image.asset(
+              "assets/images/app_logo.jpg",
+              width: 100,
+              height: 100,
+            )),
+            const Text(
+              "ILAJ KARAO PK",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic),
+            ),
+            const CircularProgressIndicator(
+              strokeWidth: 4,
+              color: Color.fromARGB(255, 0, 151, 93),
+            )
+          ],
+        ),
       ),
     );
   }
