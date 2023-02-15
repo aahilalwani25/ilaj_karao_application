@@ -42,17 +42,17 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     super.initState();
 
-    Timer(
-        const Duration(seconds: 5),
-        () => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (builder) => const IntroScreenClass())));
+    // Timer(
+    //     const Duration(seconds: 5),
+    //     () => Navigator.pushReplacement(context,
+    //         MaterialPageRoute(builder: (builder) => const IntroScreenClass())));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.white,
+        color: Color.fromARGB(255, 58, 48, 189),
         width: getWidth(context),
         height: getHeight(context),
         // decoration: const BoxDecoration(
@@ -67,17 +67,17 @@ class _MyHomePageState extends State<MyHomePage> {
         //     ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-                child: Image.asset(
-              "assets/images/app_logo.jpg",
-              width: 100,
-              height: 100,
-            )),
-            const Text(
+          children: const [
+
+            //AnimatedContainer(duration: 5,),
+            CircleAvatar(
+              radius: 50,
+              backgroundImage: AssetImage("assets/images/app_logo.jpg"),
+                ),
+            Text(
               "ILAJ KARAO PK",
               style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                   fontStyle: FontStyle.italic),
