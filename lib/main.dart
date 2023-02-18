@@ -42,29 +42,20 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     super.initState();
 
-    // Timer(
-    //     const Duration(seconds: 5),
-    //     () => Navigator.pushReplacement(context,
-    //         MaterialPageRoute(builder: (builder) => const IntroScreenClass())));
+    Timer(
+        const Duration(seconds: 5),
+        () => Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (builder) => const IntroScreenClass())));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Color.fromARGB(255, 58, 48, 189),
+        color: Styles().getPurpleColor,
         width: getWidth(context),
         height: getHeight(context),
-        // decoration: const BoxDecoration(
-        //   color: Colors.black,
-        //   //backgroundBlendMode: BlendMode.darken,
-        //     image: DecorationImage(
-        //       fit: BoxFit.cover,
-        //       image: AssetImage("assets/images/bg_img.jpg"),
-        //         alignment: Alignment.center,
-        //         ),
-
-        //     ),
+        
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
