@@ -33,7 +33,7 @@ class _SignupFormState extends State<SignupForm> {
                   }
                   return null;
                 },
-                onSaved: (value) => _email = value,
+                onSaved: (value) => _full_name = value,
                 keyboardType: TextInputType.name,
                 decoration: Styles.getTextboxInput(
                     hint: "Enter Full Name",
@@ -65,7 +65,7 @@ class _SignupFormState extends State<SignupForm> {
                   }
                   return null;
                 },
-                onSaved: (value) => _email = value,
+                onSaved: (value) => _phone = value,
                 keyboardType: TextInputType.phone,
                 decoration: Styles.getTextboxInput(
                     hint: "Enter Phone", prefixIcon: const Icon(Icons.phone))),
@@ -93,7 +93,7 @@ class _SignupFormState extends State<SignupForm> {
                     }
                     return null;
                   },
-                  onSaved: (value) => _email = value,
+                  onSaved: (value) => _dob = value,
                   keyboardType: TextInputType.emailAddress,
                   decoration: Styles.getTextboxInput(
                       hint: "Enter Date of Birth",
@@ -118,7 +118,7 @@ class _SignupFormState extends State<SignupForm> {
                     }
                     return null;
                   },
-                  onSaved: (value) => _email = value,
+                  onSaved: (value) => _gender = value,
                   keyboardType: TextInputType.emailAddress,
                   decoration: Styles.getTextboxInput(
                       hint: "Enter Gender",
@@ -169,7 +169,12 @@ class _SignupFormState extends State<SignupForm> {
               width: getWidth(context)*0.6,
               child: ElevatedButton(style: ElevatedButton.styleFrom(
                 backgroundColor: Styles().getPurpleColor,
-              ), onPressed: () {}, child: Text('Sign up'))),
+              ), onPressed: () {
+
+                //save the form state
+                _formkey.currentState!.save();
+                print(_dob!+" "+_full_name!);
+              }, child: Text('Sign up'))),
           )
         ],
       )));
