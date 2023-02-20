@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ilaj_karao_application/Controllers/SignupController.dart';
+import 'package:ilaj_karao_application/Models/NewUser.dart';
 import 'package:ilaj_karao_application/Screens/LoginForm.dart';
 import '../global/styles/screens.dart';
 
@@ -12,10 +14,10 @@ class SignupForm extends StatefulWidget {
 class _SignupFormState extends State<SignupForm> {
   //form key works just like findViewById in Java
   final _formkey = GlobalKey<FormState>();
-  String? _email, _password, _dob, _full_name, _phone, _gender;
+  String? _email, _password, _c_password, _dob, _full_name, _phone="+92", _gender;
 
   EdgeInsets paddingSpaceTextbox =
-      EdgeInsets.symmetric(horizontal: 20, vertical: 10);
+      EdgeInsets.symmetric(horizontal: 20, vertical: 7);
 
   Form getForm(BuildContext context) => (Form(
       key: _formkey,
@@ -44,8 +46,11 @@ class _SignupFormState extends State<SignupForm> {
             padding: paddingSpaceTextbox,
             child: TextFormField(
                 validator: (value) {
+                  RegExp regexp= RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
                   if (value!.isEmpty) {
                     return "Enter Email Address";
+                  }else if(!regexp.hasMatch(value)){
+                    return "Pleae enter valid email address";
                   }
                   return null;
                 },
@@ -60,9 +65,14 @@ class _SignupFormState extends State<SignupForm> {
             padding: paddingSpaceTextbox,
             child: TextFormField(
                 validator: (value) {
+                  //Pattern pattern=r'(3[0-9]{2})\6|0(3[0-9]{2})( |\-)?)[0-9])';
+                  //RegExp regExp=RegExp(pattern.toString());
                   if (value!.isEmpty) {
                     return "Enter phone";
                   }
+                  // else if(!regExp.hasMatch(value)){
+                  //   return "Enter valid Phone Number";
+                  // }
                   return null;
                 },
                 onSaved: (value) => _phone = value,
@@ -84,17 +94,21 @@ class _SignupFormState extends State<SignupForm> {
                   firstDate: DateTime(1900),
                   lastDate: DateTime(2024),
                 );
+
+                setState((){
+                  _dob=dob.toString();
+                });
               },
               child: TextFormField(
                   enabled: false,
+                  //initialValue: _dob,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Enter DOB";
                     }
                     return null;
                   },
-                  onSaved: (value) => _dob = value,
-                  keyboardType: TextInputType.emailAddress,
+                  onSaved: (value) => value=_dob,
                   decoration: Styles.getTextboxInput(
                       hint: "Enter Date of Birth",
                       prefixIcon: const Icon(Icons.calendar_month))),
@@ -127,7 +141,6 @@ class _SignupFormState extends State<SignupForm> {
           ),
 
           //password
-          //phone
           Padding(
             padding: paddingSpaceTextbox,
             child: TextFormField(
@@ -135,10 +148,12 @@ class _SignupFormState extends State<SignupForm> {
                 validator: (value) {
                   if (value!.isEmpty) {
                     return "Enter password";
+                  }else if(value.length<8){
+                    return "Password must have at least 8 characters";
                   }
                   return null;
                 },
-                onSaved: (value) => _email = value,
+                onSaved: (value) => _password = value,
                 keyboardType: TextInputType.text,
                 decoration: Styles.getTextboxInput(
                     hint: "Enter Password",
@@ -148,14 +163,18 @@ class _SignupFormState extends State<SignupForm> {
           Padding(
             padding: paddingSpaceTextbox,
             child: TextFormField(
+              //onSaved: (value)=>_password=value,
                 obscureText: true,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "Enter password";
+                    return "Enter Confirm password";
                   }
+                  // if(_password!=value){
+                  //   return "Password does not match";
+                  // }
                   return null;
                 },
-                onSaved: (value) => _email = value,
+                //onSaved: (value) => _password = value,
                 keyboardType: TextInputType.text,
                 decoration: Styles.getTextboxInput(
                     hint: "Enter Confirm Password",
@@ -170,11 +189,22 @@ class _SignupFormState extends State<SignupForm> {
               child: ElevatedButton(style: ElevatedButton.styleFrom(
                 backgroundColor: Styles().getPurpleColor,
               ), onPressed: () {
+                if(_formkey.currentState!.validate()){
+                  _formkey.currentState!.save();
 
-                //save the form state
-                _formkey.currentState!.save();
-                print(_dob!+" "+_full_name!);
-              }, child: Text('Sign up'))),
+                  NewUser user= NewUser(name: _full_name,
+                  password: _password,
+                  gender: _gender,
+                  phone: _phone,
+                  email: _email, 
+                  dob: _dob,
+                  );
+
+                  SignupController(user: user)
+                  .signUpUser()
+                  .then((value) => print("Signed up"));
+                }
+              }, child: const Text('Sign up'))),
           )
         ],
       )));
@@ -218,7 +248,7 @@ class _SignupFormState extends State<SignupForm> {
           ),
           width: getWidth(context)*0.9,
           alignment: Alignment.center,
-          margin: EdgeInsets.only(top: getHeight(context) * 0.23, left: getWidth(context)*0.09, right: getWidth(context) * 0.09),
+          margin: EdgeInsets.only(top: getHeight(context) * 0.1, left: getWidth(context)*0.07, right: getWidth(context) * 0.09),
           child: Column(children: [
             Text(
               "Welcome!",

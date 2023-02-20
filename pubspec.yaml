@@ -40,6 +40,7 @@ dependencies:
   shared_preferences: ^2.0.17
   intl: ^0.17.0
   scoped_model: ^2.0.0
+  firebase_database: ^10.0.13
 
 dev_dependencies:
   flutter_test:

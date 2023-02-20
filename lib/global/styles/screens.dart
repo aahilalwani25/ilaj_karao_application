@@ -12,8 +12,11 @@ class Styles {
   Color get getPurpleColor => const Color.fromARGB(255, 58, 48, 189);
 
   //callback
-  static InputDecoration getTextboxInput({required String hint, required Icon prefixIcon, Icon? suffixIcon, bool passwordVisible=true}) => (InputDecoration(
-        border: InputBorder.none,
+  static InputDecoration getTextboxInput({required String hint, required Icon prefixIcon, Icon? suffixIcon, bool passwordVisible=true}) => (
+    InputDecoration(
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(40))
+        ),
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon!=null?(
           InkWell(
