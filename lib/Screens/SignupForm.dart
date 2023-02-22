@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ilaj_karao_application/Controllers/SignupController.dart';
 import 'package:ilaj_karao_application/Models/NewUser.dart';
 import 'package:ilaj_karao_application/Screens/LoginForm.dart';
+import 'package:intl/intl.dart';
 import '../global/styles/screens.dart';
 
 class SignupForm extends StatefulWidget {
@@ -14,7 +15,13 @@ class SignupForm extends StatefulWidget {
 class _SignupFormState extends State<SignupForm> {
   //form key works just like findViewById in Java
   final _formkey = GlobalKey<FormState>();
-  String? _email, _password, _c_password, _dob, _full_name, _phone="+92", _gender;
+  String? _email,
+      _password,
+      _c_password,
+      _dob = 'Enter Date Of Birth',
+      _full_name,
+      _phone = "+92",
+      _gender = "Enter Gender";
 
   EdgeInsets paddingSpaceTextbox =
       EdgeInsets.symmetric(horizontal: 20, vertical: 7);
@@ -46,10 +53,11 @@ class _SignupFormState extends State<SignupForm> {
             padding: paddingSpaceTextbox,
             child: TextFormField(
                 validator: (value) {
-                  RegExp regexp= RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+                  RegExp regexp = RegExp(
+                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
                   if (value!.isEmpty) {
                     return "Enter Email Address";
-                  }else if(!regexp.hasMatch(value)){
+                  } else if (!regexp.hasMatch(value)) {
                     return "Pleae enter valid email address";
                   }
                   return null;
@@ -85,59 +93,84 @@ class _SignupFormState extends State<SignupForm> {
           Padding(
             padding: paddingSpaceTextbox,
             child: InkWell(
-              onTap: () async {
-                //print("calendar");
+                onTap: () async {
+                  //print("calendar");
 
-                final dob = await showDatePicker(
-                  context: context,
-                  initialDate: DateTime.now(),
-                  firstDate: DateTime(1900),
-                  lastDate: DateTime(2024),
-                );
+                  final dob = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime(2024),
+                  );
 
-                setState((){
-                  _dob=dob.toString();
-                });
-              },
-              child: TextFormField(
-                  enabled: false,
-                  //initialValue: _dob,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Enter DOB";
-                    }
-                    return null;
-                  },
-                  onSaved: (value) => value=_dob,
-                  decoration: Styles.getTextboxInput(
-                      hint: "Enter Date of Birth",
-                      prefixIcon: const Icon(Icons.calendar_month))),
-            ),
+                  setState(() {
+                    _dob = DateFormat('yMMMMd').format(dob!).toString();
+                  });
+                },
+                child: Container(
+                  padding: EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    color: Styles().getTextBoxColor,
+                    borderRadius: BorderRadius.all(Radius.circular(40)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(Icons.calendar_month),
+                      Text('$_dob'),
+                    ],
+                  ),
+                )),
           ),
 
-          //date of birth
+          //gender
           Padding(
             padding: paddingSpaceTextbox,
             child: InkWell(
-              onTap: () async {
-                //print("calendar");
+                onTap: () async {
+                  showDialog(
+                      context: context,
+                      builder: (builder) {
+                        return AlertDialog(
+                          title: const Text('SELECT GENDER'),
+                          actions: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _gender = "Male";
+                                  });
 
-                
-              },
-              child: TextFormField(
-                  enabled: false,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Enter Gender";
-                    }
-                    return null;
-                  },
-                  onSaved: (value) => _gender = value,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: Styles.getTextboxInput(
-                      hint: "Enter Gender",
-                      prefixIcon: const Icon(Icons.male))),
-            ),
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Male')),
+                            ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _gender = "Female";
+                                  });
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Female')),
+                          ],
+                        );
+                      });
+                },
+                child: Container(
+                  padding: EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                    color: Color.fromARGB(255, 230, 229, 229),
+                    borderRadius: BorderRadius.all(Radius.circular(40)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(Icons.male),
+                      Text('$_gender'),
+                    ],
+                  ),
+                )),
           ),
 
           //password
@@ -145,10 +178,11 @@ class _SignupFormState extends State<SignupForm> {
             padding: paddingSpaceTextbox,
             child: TextFormField(
                 obscureText: true,
+                onChanged: (value) => _password=value,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return "Enter password";
-                  }else if(value.length<8){
+                  } else if (value.length < 8) {
                     return "Password must have at least 8 characters";
                   }
                   return null;
@@ -163,15 +197,15 @@ class _SignupFormState extends State<SignupForm> {
           Padding(
             padding: paddingSpaceTextbox,
             child: TextFormField(
-              //onSaved: (value)=>_password=value,
+                //onSaved: (value)=>_password=value,
                 obscureText: true,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return "Enter Confirm password";
                   }
-                  // if(_password!=value){
-                  //   return "Password does not match";
-                  // }
+                  if(_password!=value){
+                    return "Password does not match";
+                  }
                   return null;
                 },
                 //onSaved: (value) => _password = value,
@@ -185,26 +219,29 @@ class _SignupFormState extends State<SignupForm> {
           Padding(
             padding: paddingSpaceTextbox,
             child: SizedBox(
-              width: getWidth(context)*0.6,
-              child: ElevatedButton(style: ElevatedButton.styleFrom(
-                backgroundColor: Styles().getPurpleColor,
-              ), onPressed: () {
-                if(_formkey.currentState!.validate()){
-                  _formkey.currentState!.save();
+                width: getWidth(context) * 0.6,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Styles().getPurpleColor,
+                    ),
+                    onPressed: () {
+                      
+                      if (_formkey.currentState!.validate()) {
+                        _formkey.currentState!.save();
 
-                  NewUser user= NewUser(name: _full_name,
-                  password: _password,
-                  gender: _gender,
-                  phone: _phone,
-                  email: _email, 
-                  dob: _dob,
-                  );
+                        NewUser user= NewUser(name: _full_name,
+                        password: _password,
+                        gender: _gender,
+                        phone: _phone,
+                        email: _email,
+                        dob: _dob,
+                        );
 
-                  SignupController(user: user)
-                  .signUpUser()
-                  .then((value) => print("Signed up"));
-                }
-              }, child: const Text('Sign up'))),
+                        SignupController sc= SignupController(user: user);
+                        sc.signUpUser(context);
+                      }
+                    },
+                    child: const Text('Sign up'))),
           )
         ],
       )));
@@ -228,11 +265,9 @@ class _SignupFormState extends State<SignupForm> {
               ),
             ),
             InkWell(
-              onTap: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (builder) => const LoginForm()));
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (builder) => const LoginForm()));
               },
               child: Text('Login'),
             )
@@ -243,12 +278,15 @@ class _SignupFormState extends State<SignupForm> {
       body: SingleChildScrollView(
         child: Container(
           decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(60)),
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(60)),
           ),
-          width: getWidth(context)*0.9,
+          width: getWidth(context) * 0.9,
           alignment: Alignment.center,
-          margin: EdgeInsets.only(top: getHeight(context) * 0.1, left: getWidth(context)*0.07, right: getWidth(context) * 0.09),
+          margin: EdgeInsets.only(
+              top: getHeight(context) * 0.1,
+              left: getWidth(context) * 0.07,
+              right: getWidth(context) * 0.09),
           child: Column(children: [
             Text(
               "Welcome!",

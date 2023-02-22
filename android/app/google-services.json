@@ -1,20 +1,21 @@
 {
   "project_info": {
-    "project_number": "168868576646",
-    "project_id": "ilaj-karao-app",
-    "storage_bucket": "ilaj-karao-app.appspot.com"
+    "project_number": "383736687265",
+    "firebase_url": "https://ilaj-karao-app-9afbc-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "ilaj-karao-app-9afbc",
+    "storage_bucket": "ilaj-karao-app-9afbc.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:168868576646:android:495f60f510248f58ab8007",
+        "mobilesdk_app_id": "1:383736687265:android:55108293aeab1ac881dee0",
         "android_client_info": {
           "package_name": "com.example.ilaj_karao_application"
         }
       },
       "oauth_client": [
         {
-          "client_id": "168868576646-i248234v1aqhjvt7csv27574f6st3udj.apps.googleusercontent.com",
+          "client_id": "383736687265-86snfa8qrq0m5673uecpkjp2detlg1k9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.ilaj_karao_application",
@@ -22,20 +23,20 @@
           }
         },
         {
-          "client_id": "168868576646-cq6jmvcl6oltetvlm9bdag88sl8ju7pq.apps.googleusercontent.com",
+          "client_id": "383736687265-9hdk3ma6hn5rcaskh29emkk2og3750e7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCtWxIqDeTw17DS1bwA0Yz_WrBjvN2j5jQ"
+          "current_key": "AIzaSyAhLdZjC_zI1lSwHlVuquCVqybGohzncO8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "168868576646-cq6jmvcl6oltetvlm9bdag88sl8ju7pq.apps.googleusercontent.com",
+              "client_id": "383736687265-9hdk3ma6hn5rcaskh29emkk2og3750e7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
