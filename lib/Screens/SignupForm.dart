@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:ilaj_karao_application/Controllers/SignupController.dart';
 import 'package:ilaj_karao_application/Models/NewUser.dart';
 import 'package:ilaj_karao_application/Screens/LoginForm.dart';
 import 'package:intl/intl.dart';
 import '../global/styles/screens.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class SignupForm extends StatefulWidget {
   const SignupForm({super.key});
@@ -15,6 +18,7 @@ class SignupForm extends StatefulWidget {
 class _SignupFormState extends State<SignupForm> {
   //form key works just like findViewById in Java
   final _formkey = GlobalKey<FormState>();
+  RoundedLoadingButtonController _roundedLoadingButtonController= RoundedLoadingButtonController();
   String? _email,
       _password,
       _c_password,
@@ -220,12 +224,16 @@ class _SignupFormState extends State<SignupForm> {
             padding: paddingSpaceTextbox,
             child: SizedBox(
                 width: getWidth(context) * 0.6,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Styles().getPurpleColor,
-                    ),
-                    onPressed: () {
+                child: RoundedLoadingButton(
+                  controller: _roundedLoadingButtonController,
+                  color: Styles().getPurpleColor,
+                    // style: ElevatedButton.styleFrom(
+                    //   backgroundColor: Styles().getPurpleColor,
                       
+                    // ),
+                    successColor: Colors.green,
+                    errorColor: Colors.red,
+                    onPressed: () {
                       if (_formkey.currentState!.validate()) {
                         _formkey.currentState!.save();
 
@@ -237,8 +245,21 @@ class _SignupFormState extends State<SignupForm> {
                         dob: _dob,
                         );
 
-                        SignupController sc= SignupController(user: user);
-                        sc.signUpUser(context);
+                        SignupController sc= SignupController(user: user, context: context);
+                        sc.verify_email()
+                        .then((value){
+                          _roundedLoadingButtonController.success();
+                          Timer(Duration(seconds: 3), () {
+                            _roundedLoadingButtonController.reset();
+                          });
+                          
+                        });
+                      }else{
+                        _roundedLoadingButtonController.error();
+                        Timer(Duration(seconds: 3),(){
+                          _roundedLoadingButtonController.reset();
+                        });
+                        
                       }
                     },
                     child: const Text('Sign up'))),

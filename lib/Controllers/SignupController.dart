@@ -5,11 +5,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupController {
   NewUser user;
+  String? uid;
   Map<String, dynamic>? users;
   final FirebaseDatabase _db = FirebaseDatabase.instance;
   DatabaseReference? _databaseReference;
+  BuildContext context; 
 
-  SignupController({required this.user}) {
+  final auth= FirebaseAuth.instance;
+
+  SignupController({required this.user, required this.context}) {
     //print(user.name);
     _databaseReference = _db.ref('users');
     users = {
@@ -27,38 +31,72 @@ class SignupController {
   }
 
 
-  _verify_email(){
+  verify_email() async{
 
-    //verify via
+    try {
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: users!['email'],
+              password: users!['password']
+          )
+          .then((userCredential){
+            uid= userCredential.user?.uid;
+            signUpUser();
+          })
+          //.then(()=>alertMessage("Si", icon))
+          .catchError((error){
+            alertMessage('The account already exists for that email.',
+            const Icon(Icons.error, color: Colors.red));
+          });
+          
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+        alertMessage('The account already exists for that email.', const Icon(Icons.error, color: Colors.red));
+      }
+    } catch (e) {
+      print(e);
+    }
+    
   }
 
-  signUpUser(BuildContext context) async {
+  Future<void> signUpUser() async {
+
+    //print('sign up');
     try {
       //var firebaseId= await FirebaseAuth.instance.currentUser;
       await _databaseReference!
-      .push()  //gives unique id
+      .child(uid!)
       .set(users).then((v) {
         print('signed up');
-        showDialog(
-            context: context,
-            builder: (builder) {
-              return AlertDialog(
-                content: const Text("Signed up Successfully"),
-                actions: [
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text("OK"))
-                ],
-              );
-            });
+        alertMessage('Signed up Successfully', const Icon(Icons.check_circle, color: Colors.green));
         //print('Signed up successfully!');
       }).onError((error, stackTrace) {
-        print("Error: ${error}");
+        alertMessage('Not sugned up',
+            const Icon(Icons.check_circle, color: Colors.green));
       });
     } catch (e) {
       print('error: ${e}');
     }
+  }
+
+  alertMessage(String? title, Icon? icon){
+    showDialog(
+        context: context,
+        builder: (builder) {
+          return AlertDialog(
+            icon: icon,
+            content: Text("${title}"),
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("OK"))
+            ],
+          );
+        });
   }
 }
