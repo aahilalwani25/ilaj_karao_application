@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:ilaj_karao_application/Controllers/LoginController.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 import '../global/styles/screens.dart';
 import 'SignupForm.dart';
@@ -15,6 +19,7 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   //form key works just like findViewById in Java
   final _formkey = GlobalKey<FormState>();
+  RoundedLoadingButtonController _roundedLoadingButtonController = RoundedLoadingButtonController();
   String? _email, _password;
 
   EdgeInsets paddingSpaceTextbox =
@@ -52,11 +57,11 @@ class _LoginFormState extends State<LoginForm> {
                 obscureText: true,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "Enter password";
+                    return "Password required";
                   }
                   return null;
                 },
-                onSaved: (value) => _email = value,
+                onSaved: (value) => _password = value,
                 keyboardType: TextInputType.text,
                 decoration: Styles.getTextboxInput(
                     hint: "Enter Password",
@@ -66,12 +71,33 @@ class _LoginFormState extends State<LoginForm> {
             padding: paddingSpaceTextbox,
             child: SizedBox(
                 width: getWidth(context) * 0.6,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Styles().getPurpleColor,
-                    ),
-                    onPressed: () {},
-                    child: Text('Login'))),
+                child: RoundedLoadingButton(
+                    controller: _roundedLoadingButtonController,
+                    color: Styles().getPurpleColor,
+                    successColor: Colors.green,
+                    errorColor: Colors.red,
+                    onPressed: () {
+                      if (_formkey.currentState!.validate()) {
+                        _formkey.currentState!.save();
+
+                        
+                        LoginController lc = LoginController(context: context, email: _email!, password: _password!);
+                        lc.login()
+                        .then((value) {
+                          _roundedLoadingButtonController.success();
+                          _formkey.currentState!.reset();
+                          Timer(Duration(seconds: 3), () {
+                            _roundedLoadingButtonController.reset();
+                          });
+                        });
+                      } else {
+                        _roundedLoadingButtonController.error();
+                        Timer(Duration(seconds: 3), () {
+                          _roundedLoadingButtonController.reset();
+                        });
+                      }
+                    },
+                    child: const Text('Login'))),
           )
         ],
       )));

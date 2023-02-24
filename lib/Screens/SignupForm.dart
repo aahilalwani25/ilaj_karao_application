@@ -22,7 +22,7 @@ class _SignupFormState extends State<SignupForm> {
   String? _email,
       _password,
       _c_password,
-      _dob = 'Enter Date Of Birth',
+      _dob = null,
       _full_name,
       _phone = "+92",
       _gender = "Enter Gender";
@@ -87,7 +87,7 @@ class _SignupFormState extends State<SignupForm> {
                   // }
                   return null;
                 },
-                onSaved: (value) => _phone = value,
+                onSaved: (value) => _phone = '+92${value}',
                 keyboardType: TextInputType.phone,
                 decoration: Styles.getTextboxInput(
                     hint: "Enter Phone", prefixIcon: const Icon(Icons.phone))),
@@ -122,7 +122,7 @@ class _SignupFormState extends State<SignupForm> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Icon(Icons.calendar_month),
-                      Text('$_dob'),
+                      (_dob!=null?Text('$_dob'):Text("Enter Date of Birth")),
                     ],
                   ),
                 )),
@@ -249,8 +249,10 @@ class _SignupFormState extends State<SignupForm> {
                         sc.verify_email()
                         .then((value){
                           _roundedLoadingButtonController.success();
+                          _formkey.currentState!.reset();
                           Timer(Duration(seconds: 3), () {
                             _roundedLoadingButtonController.reset();
+                            
                           });
                           
                         });
@@ -258,11 +260,13 @@ class _SignupFormState extends State<SignupForm> {
                         _roundedLoadingButtonController.error();
                         Timer(Duration(seconds: 3),(){
                           _roundedLoadingButtonController.reset();
+                          
                         });
                         
                       }
                     },
-                    child: const Text('Sign up'))),
+                    child: const Text('Sign up'))
+                    ),
           )
         ],
       )));
