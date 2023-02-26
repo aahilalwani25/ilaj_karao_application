@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ilaj_karao_application/Screens/UserDashboard.dart';
 
+import '../Screens/Admin_Dashboard.dart';
 import '../global/components/AlertMessages.dart';
 
 class LoginController {
@@ -14,19 +15,26 @@ class LoginController {
       {required this.context, required this.email, required this.password});
 
   Future<void> login() async {
-    try {
-      await auth
-          .signInWithEmailAndPassword(email: email, password: password)
-          .then((value) {
-        Navigator.pushReplacement(context!,
-                MaterialPageRoute(builder: (builder) => const UserDashboard()))
-            .catchError((value) {
-          alertMessage(context, 'Either username or password is incorrect',
-              Icon(Icons.error));
+    if (email == "admin@ilajkarao.com" && password == "admin786") {
+      Navigator.pushReplacement(context!,
+          MaterialPageRoute(builder: (builder) => const AdminDashboard()));
+    } else {
+      try {
+        await auth
+            .signInWithEmailAndPassword(email: email, password: password)
+            .then((value) {
+          Navigator.pushReplacement(
+                  context!,
+                  MaterialPageRoute(
+                      builder: (builder) => const UserDashboard()))
+              .catchError((value) {
+            alertMessage(context, 'Either username or password is incorrect',
+                Icon(Icons.error));
+          });
         });
-      });
-    } on FirebaseAuthException catch (e) {
-      alertMessage(context, 'Error', Icon(Icons.error));
+      } on FirebaseAuthException catch (e) {
+        alertMessage(context, 'Error', Icon(Icons.error));
+      }
     }
   }
 }

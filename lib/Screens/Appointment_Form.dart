@@ -20,6 +20,9 @@ class _AppointmentFormState extends State<AppointmentForm> {
   DatabaseReference hospitals= FirebaseDatabase.instance.ref('hospitals');
   bool showHospitalList=false;
 
+  //appointment attributes
+  String? hospitalNameSelected, email;
+
   
   @override
   Widget build(BuildContext context) {
@@ -65,7 +68,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                       borderRadius: BorderRadius.all(Radius.circular(20)),
                     ),
                     child: ListTile(
-                      title: Text(DropdownList.getSelectedOption().toString()),
+                      title: Text(''),
                       trailing: InkWell(
                         onTap: () => setState(() {
                           showHospitalList=!showHospitalList;
@@ -79,7 +82,11 @@ class _AppointmentFormState extends State<AppointmentForm> {
                 SizedBox(
                   //width: getWidth(context),
                   height: 100,
-                  child: DropdownList.getDropdownLists(hospitals, showHospitalList),
+                  child: DropdownList(
+                    onTap: (){
+
+                    }, databaseReference: hospitals, toggle: showHospitalList)
+                  .getDropdownLists(),
                 ),
               ],
             )

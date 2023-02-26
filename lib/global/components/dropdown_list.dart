@@ -3,11 +3,18 @@ import 'package:flutter/material.dart';
 
 class DropdownList{
 
-  static String? selectedOption;
-  static Widget getDropdownLists(DatabaseReference dbReference, bool toggle) {
+  String? selectedOption;
+
+  final void Function() onTap;
+  DatabaseReference databaseReference;
+  bool toggle;
+
+  DropdownList({required this.onTap, required DatabaseReference this.databaseReference, required this.toggle});
+
+  Widget getDropdownLists() {
     if (toggle) {
       return StreamBuilder(
-          stream: dbReference.onValue,
+          stream: databaseReference.onValue,
           builder: (builder, snapshot) {
             if (!snapshot.hasData) {
               return CircularProgressIndicator(
@@ -34,9 +41,5 @@ class DropdownList{
           });
     }
     return Container();
-  }
-
-  static String? getSelectedOption(){
-    return selectedOption;
   }
 }
