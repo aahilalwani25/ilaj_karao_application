@@ -31,7 +31,7 @@ class SignupController {
   }
 
 
-  verify_email() async{
+  Future<void> verify_email() async{
 
     try {
       await FirebaseAuth.instance

@@ -18,7 +18,7 @@ class _UserDashboardState extends State<UserDashboard> {
       appBar: AppBar(
         backgroundColor: Styles().getPurpleColor,
       ),
-      drawer: Navigation_Drawer(context: context, user_type: 'user').getDrawer
+      drawer: Navigation_Drawer(context: context).getUserDrawer
     );
   }
 }

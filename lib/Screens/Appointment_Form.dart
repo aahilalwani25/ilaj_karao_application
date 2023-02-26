@@ -32,7 +32,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
           backgroundColor: Styles().getPurpleColor,
         ),
         drawer:
-            Navigation_Drawer(context: context, user_type: 'user').getDrawer,
+            Navigation_Drawer(context: context).getUserDrawer,
         body: Form(
             key: _formKey,
             child: Column(

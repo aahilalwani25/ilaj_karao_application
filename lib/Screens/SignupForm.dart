@@ -247,14 +247,18 @@ class _SignupFormState extends State<SignupForm> {
 
                         SignupController sc= SignupController(user: user, context: context);
                         sc.verify_email()
-                        .then((value){
+                        .then((value) async {
                           _roundedLoadingButtonController.success();
                           _formkey.currentState!.reset();
                           Timer(Duration(seconds: 3), () {
                             _roundedLoadingButtonController.reset();
-                            
                           });
-                          
+                        })
+                        .catchError((onError){
+                           _roundedLoadingButtonController.error();
+                          Timer(Duration(seconds: 3), () {
+                            _roundedLoadingButtonController.reset();
+                          });
                         });
                       }else{
                         _roundedLoadingButtonController.error();
@@ -269,7 +273,10 @@ class _SignupFormState extends State<SignupForm> {
                     ),
           )
         ],
-      )));
+      )
+    )
+    
+  );
 
   @override
   Widget build(BuildContext context) {
