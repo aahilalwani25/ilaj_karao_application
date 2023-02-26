@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:ilaj_karao_application/Models/LoggedInUser.dart';
 import './global/styles/screens.dart';
+import 'Screens/UserDashboard.dart';
 import 'Screens/intro_screen.dart';
 
 Future<void> main() async {
@@ -44,8 +47,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
     Timer(
         const Duration(seconds: 5),
-        () => Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (builder) => const IntroScreenClass())));
+        (){
+          if(LoggedInUser().isLoggedIn()!=null){
+            Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (builder) => const UserDashboard()));
+          }else{
+          Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (builder) => const IntroScreenClass()));
+          }
+        }
+    );
   }
 
   @override

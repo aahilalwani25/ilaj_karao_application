@@ -1,6 +1,14 @@
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:ilaj_karao_application/Models/LoggedInUser.dart';
+import 'package:ilaj_karao_application/Models/NewUser.dart';
+import 'package:ilaj_karao_application/Screens/LoginForm.dart';
 
 import '../global/styles/screens.dart';
+import 'Appointment_Form.dart';
 
 // ignore: camel_case_types
 class Navigation_Drawer {
@@ -16,6 +24,8 @@ class Navigation_Drawer {
 
   Color _selectedColor = Color.fromARGB(255, 218, 218, 218);
   bool _selected = false;
+  
+  
   //DrawerControllerState drawerControllerState= DrawerControllerState();
 
   Drawer get getDrawer => (Drawer(
@@ -40,19 +50,19 @@ class Navigation_Drawer {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            'Email',
-                            style: TextStyle(color: Colors.white),
+                          Text(
+                            FirebaseAuth.instance.currentUser!.email.toString(),
+                            style: const TextStyle(color: Colors.white),
                           ),
                           InkWell(
                               onTap: () {},
-                              child: CircleAvatar(
+                              child: const CircleAvatar(
                                   backgroundColor: Colors.white,
-                                  child: const Icon(
+                                  child: Icon(
                                     Icons.create_rounded,
                                     color: Colors.grey,
                                   )))
@@ -63,8 +73,10 @@ class Navigation_Drawer {
                 )),
           )),
           InkWell(
-            onTap: () {},
-            child: ListTile(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (builder)=>const AppointmentForm()));
+            },
+            child: const ListTile(
               title: Text('Register Appointment'),
               leading: Icon(Icons.create_rounded),
             ),
@@ -84,7 +96,13 @@ class Navigation_Drawer {
             ),
           ),
           InkWell(
-            onTap: () => print('register'),
+            onTap: () {
+              FirebaseAuth.instance.signOut();
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (builder) => const LoginForm()));
+            },
             child: ListTile(
               title: Text('Sign out'),
               leading: Icon(
